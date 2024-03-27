@@ -16,7 +16,7 @@ public class Client_View extends javax.swing.JFrame {
 
     private Person p = new Person();
     private static IMethodsShred objServer;
-    private List<Person> listPeron;
+    //private List<Person> listPeron;
 
     public Client_View() {
         initComponents();
@@ -66,6 +66,11 @@ public class Client_View extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        tblPerson.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPersonMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPerson);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, 250));
@@ -112,6 +117,11 @@ public class Client_View extends javax.swing.JFrame {
         jPanel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, -1, -1));
 
         btnModify.setText("Modificar");
+        btnModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnModify, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 300, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -142,14 +152,40 @@ public class Client_View extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
+        List<Person> listPeron;
         try {
             listPeron = objServer.consultPerson(txtFilter.getText());
             updateTable(listPeron);
         } catch (RemoteException ex) {
             Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void tblPersonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPersonMouseClicked
+        int fila = tblPerson.getSelectedRow();
+
+        if (fila != -1) {
+
+            int id = (int) tblPerson.getValueAt(fila, 0);
+            String name = (String) tblPerson.getValueAt(fila, 1);
+            String address = (String) tblPerson.getValueAt(fila, 2);
+            String phoneNumber = (String) tblPerson.getValueAt(fila, 3);
+
+            txtId.setText(String.valueOf(id));
+            txtName.setText(name);
+            txtAddress.setText(address);
+            txtPhoneNumber.setText(phoneNumber);
+
+        }
+
+    }//GEN-LAST:event_tblPersonMouseClicked
+
+    private void btnModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyActionPerformed
+        // TODO add your handling code here:
+        
+        
+        
+    }//GEN-LAST:event_btnModifyActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -210,6 +246,16 @@ public class Client_View extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void updateTable(List<Person> list) {
+        DefaultTableModel modelTable = (DefaultTableModel) tblPerson.getModel();
+        modelTable.setRowCount(0);
 
+        for (Person p : list) {
+            Object[] fila = new Object[4];
+            fila[0] = p.getId();
+            fila[1] = p.getName();
+            fila[2] = p.getAddress();
+            fila[3] = p.getPhoneNumber();
+            modelTable.addRow(fila);
+        }
     }
 }
