@@ -5,14 +5,18 @@ import org.ax.jdbc.middleware.Person;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import org.ax.jdbc.middleware.IMethodsShred;
 
 public class Client_View extends javax.swing.JFrame {
 
     private Person p = new Person();
     private static IMethodsShred objServer;
+    private List<Person> listPeron;
 
     public Client_View() {
         initComponents();
@@ -72,6 +76,11 @@ public class Client_View extends javax.swing.JFrame {
         jPanel1.add(txtFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 360, -1));
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
@@ -131,6 +140,17 @@ public class Client_View extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+
+        try {
+            listPeron = objServer.consultPerson(txtFilter.getText());
+            updateTable(listPeron);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -189,8 +209,7 @@ public class Client_View extends javax.swing.JFrame {
     private javax.swing.JTextField txtPhoneNumber;
     // End of variables declaration//GEN-END:variables
 
-    private void tablePeople() {
-        
-    }
+    private void updateTable(List<Person> list) {
 
+    }
 }
