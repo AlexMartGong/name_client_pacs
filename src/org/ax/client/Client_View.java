@@ -8,7 +8,6 @@ import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.ax.jdbc.middleware.IMethodsShred;
 
@@ -16,7 +15,6 @@ public class Client_View extends javax.swing.JFrame {
 
     private Person p = new Person();
     private static IMethodsShred objServer;
-    //private List<Person> listPeron;
 
     public Client_View() {
         initComponents();
@@ -42,11 +40,13 @@ public class Client_View extends javax.swing.JFrame {
         txtPhoneNumber = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         btnModify = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        tblPerson.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         tblPerson.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -61,9 +61,16 @@ public class Client_View extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tblPerson.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -78,8 +85,11 @@ public class Client_View extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         jLabel1.setText("Buscar");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        txtFilter.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jPanel1.add(txtFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 360, -1));
 
+        btnBuscar.setFont(new java.awt.Font("Roboto Medium", 0, 12)); // NOI18N
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,23 +101,32 @@ public class Client_View extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         jLabel2.setText("ID");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
+
+        txtId.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jPanel1.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 50, 140, -1));
 
         jLabel3.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         jLabel3.setText("Name");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, -1, -1));
+
+        txtName.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 120, 200, -1));
 
         jLabel4.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         jLabel4.setText("Address");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 160, -1, -1));
+
+        txtAddress.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jPanel1.add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 190, 200, -1));
 
         jLabel5.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
         jLabel5.setText("Phone number");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 230, -1, -1));
+
+        txtPhoneNumber.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jPanel1.add(txtPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, 200, -1));
 
+        btnSave.setFont(new java.awt.Font("Roboto Medium", 0, 12)); // NOI18N
         btnSave.setText("Guardar");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,6 +135,7 @@ public class Client_View extends javax.swing.JFrame {
         });
         jPanel1.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, -1, -1));
 
+        btnModify.setFont(new java.awt.Font("Roboto Medium", 0, 12)); // NOI18N
         btnModify.setText("Modificar");
         btnModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,6 +143,15 @@ public class Client_View extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnModify, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 300, -1, -1));
+
+        btnDelete.setFont(new java.awt.Font("Roboto Medium", 0, 12)); // NOI18N
+        btnDelete.setText("Eliminar");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 300, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,6 +177,7 @@ public class Client_View extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
         }
+        clear();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -181,11 +211,32 @@ public class Client_View extends javax.swing.JFrame {
     }//GEN-LAST:event_tblPersonMouseClicked
 
     private void btnModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyActionPerformed
-        // TODO add your handling code here:
+
+        p.setId(Integer.parseInt(txtId.getText()));
+        p.setName(txtName.getText());
+        p.setAddress(txtAddress.getText());
+        p.setPhoneNumber(txtPhoneNumber.getText());
         
+        try {
+            objServer.updatePerson(p);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+        clear();
         
     }//GEN-LAST:event_btnModifyActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        p.setId(Integer.parseInt(txtId.getText()));
+        
+        try {
+            objServer.deletePerson(p);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        clear();
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -228,6 +279,7 @@ public class Client_View extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnModify;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
@@ -258,4 +310,12 @@ public class Client_View extends javax.swing.JFrame {
             modelTable.addRow(fila);
         }
     }
+    
+    private void clear() {
+        txtId.setText("");
+        txtName.setText("");
+        txtAddress.setText("");
+        txtPhoneNumber.setText("");
+    }
+    
 }
