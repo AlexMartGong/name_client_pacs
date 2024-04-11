@@ -16,8 +16,15 @@ public class Client_View extends javax.swing.JFrame {
     private Person p = new Person();
     private static IMethodsShred objServer;
 
-    public Client_View() {
+    public Client_View() throws RemoteException {
         initComponents();
+        List<Person> listPeron;
+        try {
+            listPeron = objServer.consultPerson("");
+            updateTable(listPeron);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -177,6 +184,13 @@ public class Client_View extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
         }
+        List<Person> listPeron;
+        try {
+            listPeron = objServer.consultPerson("");
+            updateTable(listPeron);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+        }
         clear();
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -216,22 +230,39 @@ public class Client_View extends javax.swing.JFrame {
         p.setName(txtName.getText());
         p.setAddress(txtAddress.getText());
         p.setPhoneNumber(txtPhoneNumber.getText());
-        
+
         try {
             objServer.updatePerson(p);
+            objServer.consultPerson("");
         } catch (RemoteException ex) {
             Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+        List<Person> listPeron;
+        try {
+            listPeron = objServer.consultPerson("");
+            updateTable(listPeron);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         clear();
-        
+
     }//GEN-LAST:event_btnModifyActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         p.setId(Integer.parseInt(txtId.getText()));
-        
+
         try {
             objServer.deletePerson(p);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        List<Person> listPeron;
+        try {
+            listPeron = objServer.consultPerson("");
+            updateTable(listPeron);
         } catch (RemoteException ex) {
             Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -265,7 +296,11 @@ public class Client_View extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Client_View().setVisible(true);
+                try {
+                    new Client_View().setVisible(true);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client_View.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -310,12 +345,12 @@ public class Client_View extends javax.swing.JFrame {
             modelTable.addRow(fila);
         }
     }
-    
+
     private void clear() {
         txtId.setText("");
         txtName.setText("");
         txtAddress.setText("");
         txtPhoneNumber.setText("");
     }
-    
+
 }
